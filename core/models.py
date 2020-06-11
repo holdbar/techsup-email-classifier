@@ -11,6 +11,10 @@ class Source(models.Model):
 
 class Email(models.Model):
     text = models.TextField()
+    annotated_text = models.TextField(blank=True, null=True)
+    manual_annotation_info = models.CharField(max_length=1000, blank=True, null=True)
+    rules_annotation_info = models.CharField(max_length=1000, blank=True, null=True)
+    model_annotation_info = models.CharField(max_length=1000, blank=True, null=True)
     source = models.ForeignKey(Source, on_delete=models.SET_NULL, blank=True, null=True)
     created_date = models.DateTimeField(default=timezone.now)
 
@@ -32,6 +36,7 @@ class ConstituencyTemplate(models.Model):
 
 class EmailSentence(models.Model):
     text = models.TextField()
+    annotated_text = models.TextField(blank=True, null=True)
     tree = models.TextField(blank=True, null=True)
     source = models.ForeignKey(Source, on_delete=models.SET_NULL, blank=True, null=True)
     template = models.ForeignKey(ConstituencyTemplate, on_delete=models.SET_NULL, blank=True, null=True)

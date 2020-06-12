@@ -30,6 +30,15 @@ class EmailProcessor:
         self.tagger = SequenceTagger.load('data/models/taggers/model-var-emb-bert-sampled/final-model.pt')
         self.line_classifier = pickle.load(open('data/models/classifiers/random-forest/line.pickle', 'rb'))
         self.urgency_classifier = pickle.load(open('data/models/classifiers/random-forest/urgency.pickle', 'rb'))
+        self.color_dict = {
+            'CRUD_WORDS': "#00FF00",
+            'CRUD_VERBS': "#00FF00",
+            'INVESTIGATION_VERBS': "#00FFFF",
+            'INVESTIGATION_WORDS': "#00FFFF",
+            'URGENCY_WORDS': "#FF00FF",
+            'TIME': "#C0C0C0",
+            'DATE': "#FFFF00"
+        }
 
     def get_synonyms(self, word):
         word_synsets = wordnet.synsets(word)
@@ -173,6 +182,22 @@ class EmailProcessor:
 
         return tag_dict
 
+    def get_annotated_email_text(self, email_sentences):
+        # import pdb; pdb.set_trace()
+        labeled_spans = []
+        for es in email_sentences:
+            tokens = es.tokens
+            for token in tokens:
+                label = token.annotation_layers['var'][0].value
+                if label != 'O':
+                    label = label[2:] # remove B- I- prefix
+                color = self.color_dict.get(label, '')
+                labeled_spans.append(f'<span style="background-color:{color};">{token.text}</span><span> </span>')
+        
+        return "".join(labeled_spans)
+
+
+        
     def check_urgency_with_date(self, date_strings):
         today = datetime.date.today()
         tomorrow = today + datetime.timedelta(days=1)
@@ -248,5 +273,5 @@ class EmailProcessor:
                 self.result['is_urgent'] = "Yes"
         if self.result['is_urgent'] == "Yes":
             self.result['urgency_markers'] = tag_dict['URGENCY_WORDS']
-
-    
+        annotated_email = self.get_annotated_email_text(email_sentences)
+        self.result['annotated_email'] = annotated_email

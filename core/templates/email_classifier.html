@@ -47,7 +47,97 @@
     </form>
 
     {% if result %}
-        <p>{{ result }}</p>
+        <hr/>
+        <div class="row col-md-8">
+            <div class="col-md-6">
+                <p>{{ result.annotated_email | safe }}</p>
+            </div>
+            <div class="col-md-2">
+                <table class="table table-bordered table-sm col-md-4">
+                    <tr>
+                        <th scope="col">Label</th>
+                        <th scope="col">Color</th>
+                    </tr>
+                    <tr scope="row">
+                        <td>L1</td>
+                        <td style="background-color:#00FF00;"></td>
+                    </tr>
+                    <tr scope="row">
+                        <td>L2</td>
+                        <td style="background-color:#00FFFF;"></td>
+                    </tr>
+                    <tr scope="row">
+                        <td>Urgency</td>
+                        <td style="background-color:#FF00FF;"></td>
+                    </tr>
+                    <tr scope="row">
+                        <td>Date</td>
+                        <td style="background-color:#C0C0C0;"></td>
+                    </tr>
+                    <tr scope="row">
+                        <td>Time</td>
+                        <td style="background-color:#FFFF00;"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <hr/>
+        <div class="row col-md-8">
+            <div class="col-md-4">
+                {% if result.possible_actions %}
+                    <p>
+                        <strong>Possible actions:</strong>
+                        <ul>
+                            {% for a in result.possible_actions %}
+                                <li>{{a}}</li>
+                            {% endfor %}
+                        </ul>
+                    </p>
+                {% endif %}
+                {% if result.possible_objects %}
+                    <p>
+                        <strong>Possible objects:</strong>
+                        <ul>
+                            {% for o in result.possible_objects %}
+                                <li>{{o}}</li>
+                            {% endfor %}
+                        </ul>
+                    </p>
+                {% endif %}
+            </div>
+            <div class="col-md-4">
+                {% if result.urgency_markers %}
+                    <p>
+                        <strong>Possible urgency markers:</strong>
+                        <ul>
+                            {% for u in result.urgency_markers %}
+                                <li>{{u}}</li>
+                            {% endfor %}
+                        </ul>
+                    </p>
+                {% endif %}
+                {% if result.possible_date %}
+                    <p>
+                        <strong>Possible dates:</strong>
+                        <ul>
+                            {% for d in result.possible_date %}
+                                <li>{{d}}</li>
+                            {% endfor %}
+                        </ul>
+                    </p>
+                {% endif %}
+                {% if result.possible_time %}
+                    <p>
+                        <strong>Possible time:</strong>
+                        <ul>
+                            {% for t in result.possible_time %}
+                                <li>{{t}}</li>
+                            {% endfor %}
+                        </ul>
+                    </p>
+                {% endif %}
+            </div>
+        </div>
     {% endif %}
 {% endblock %}
 

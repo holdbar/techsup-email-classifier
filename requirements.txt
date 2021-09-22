@@ -33,7 +33,7 @@ dateparser==0.7.5
 decorator==4.4.2
 defusedxml==0.6.0
 Deprecated==1.2.10
-Django==3.0.5
+Django==3.1.13
 django-widget-tweaks==1.4.8
 docutils==0.15.2
 editdistance==0.5.3
